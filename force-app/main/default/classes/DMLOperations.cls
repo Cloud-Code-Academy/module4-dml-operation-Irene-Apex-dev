@@ -34,7 +34,7 @@ public with sharing class DMLOperations {
         Account account = new Account();
 
         // Set some fields on the Account
-        Account.name = 'Random name ' + datetime.now();
+        account.Name = 'Random name ' + datetime.now();
 
         // Insert the Account into the database
         insert account;
@@ -53,8 +53,8 @@ public with sharing class DMLOperations {
 
         // Create a new Account and set the fields inline
         Account account = new Account();
-        account.name = name;
-        account.industry = industry;
+        account.Name = name;
+        account.Industry = industry;
 
         // Insert the Account
         insert account;
@@ -76,10 +76,10 @@ public with sharing class DMLOperations {
         Contact contact = new Contact();
 
         // Set some fields on the Contact
-        Contact.FirstName = 'Alex';
-        Contact.LastName = 'Smith';
+        contact.FirstName = 'Alex';
+        contact.LastName = 'Smith';
         // Set the AccountId field to the given accountId
-        Contact.AccountId = accountId;
+        contact.AccountId = accountId;
 
         // Insert the Contact into the database
         insert contact;
@@ -159,7 +159,11 @@ public with sharing class DMLOperations {
                 // Set the Opportunity's Stage to Qualification
                 opportunity.StageName = 'Qualification';
                 // Set the Opportunity's Close Date to 3 months from today
-                opportunity.CloseDate = opportunity.CloseDate.addMonths(3);
+                if(opportunity.CloseDate == null) {
+                    opportunity.CloseDate = Date.today().addMonths(3);
+                } else {
+                    opportunity.CloseDate = opportunity.CloseDate.addMonths(3);
+                }
                 // Set the Opportunity's Amount to 50000
                 opportunity.Amount = 50000;
             }
@@ -185,8 +189,7 @@ public with sharing class DMLOperations {
 
         List<Opportunity> opportunities = new List<Opportunity>();
 
-        Set<String> setOppNames = new Set<String>();
-        setOppNames.addall(oppNames);
+        Set<String> setOppNames = new Set<String>(oppNames);
 
         // Loop through each Opportunity name
             for (String name : setOppNames) {
@@ -218,7 +221,7 @@ public with sharing class DMLOperations {
 
         Account account;
 		// if the Account exists, update the description
-        if (accounts.isEmpty() == false) {
+        if (!accounts.isEmpty()) {
             account = accounts.get(0);
             account.Description = 'Updated Account';
         }
@@ -297,7 +300,7 @@ public with sharing class DMLOperations {
         List<Case> cases = new List<Case>();
 
         for (Integer i = 1; i <= numOfCases; i++) {
-            Case newCase = new case();
+            Case newCase = new Case();
             newCase.AccountId = accountId;
             cases.add(newCase);
         }
